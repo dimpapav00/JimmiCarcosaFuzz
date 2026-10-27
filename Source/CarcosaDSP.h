@@ -20,6 +20,7 @@
 namespace carcosa
 {
 constexpr float kTwoPi = 6.283185307179586f;
+constexpr double kPi = 3.14159265358979323846; // the Windows compiler does not define M_PI
 
 struct Params
 {
@@ -55,7 +56,7 @@ struct BiquadCoef
 
     static BiquadCoef lowShelf (double fs, double f0, double gainDb, double S = 0.8)
     {
-        const double A = std::pow (10.0, gainDb / 40.0), w = 2.0 * M_PI * f0 / fs, c = std::cos (w), s = std::sin (w);
+        const double A = std::pow (10.0, gainDb / 40.0), w = 2.0 * kPi * f0 / fs, c = std::cos (w), s = std::sin (w);
         const double al = s / 2.0 * std::sqrt ((A + 1.0 / A) * (1.0 / S - 1.0) + 2.0), k = 2.0 * std::sqrt (A) * al;
         const double a0 = (A + 1) + (A - 1) * c + k;
         return norm ({ A * ((A + 1) - (A - 1) * c + k), 2 * A * ((A - 1) - (A + 1) * c), A * ((A + 1) - (A - 1) * c - k),
@@ -63,7 +64,7 @@ struct BiquadCoef
     }
     static BiquadCoef highShelf (double fs, double f0, double gainDb, double S = 0.8)
     {
-        const double A = std::pow (10.0, gainDb / 40.0), w = 2.0 * M_PI * f0 / fs, c = std::cos (w), s = std::sin (w);
+        const double A = std::pow (10.0, gainDb / 40.0), w = 2.0 * kPi * f0 / fs, c = std::cos (w), s = std::sin (w);
         const double al = s / 2.0 * std::sqrt ((A + 1.0 / A) * (1.0 / S - 1.0) + 2.0), k = 2.0 * std::sqrt (A) * al;
         const double a0 = (A + 1) - (A - 1) * c + k;
         return norm ({ A * ((A + 1) + (A - 1) * c + k), -2 * A * ((A - 1) + (A + 1) * c), A * ((A + 1) + (A - 1) * c - k),
@@ -71,7 +72,7 @@ struct BiquadCoef
     }
     static BiquadCoef peak (double fs, double f0, double Q, double gainDb)
     {
-        const double A = std::pow (10.0, gainDb / 40.0), w = 2.0 * M_PI * f0 / fs, c = std::cos (w), al = std::sin (w) / (2.0 * Q);
+        const double A = std::pow (10.0, gainDb / 40.0), w = 2.0 * kPi * f0 / fs, c = std::cos (w), al = std::sin (w) / (2.0 * Q);
         return norm ({ 1 + al * A, -2 * c, 1 - al * A, -2 * c, 1 - al / A }, 1 + al / A);
     }
 
